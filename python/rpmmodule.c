@@ -270,7 +270,7 @@ static int initAndAddType(PyObject *m, PyTypeObject **type, PyType_Spec *spec,
         if (!*type) return 0;
     }
     /* reference counting for PyModule_AddObject is tricky, see the docs */
-    Py_INCREF(&hdr_Type);
+    Py_INCREF(*type);
     if (PyModule_AddObject(m, name, (PyObject *) *type) < 0) {
         Py_DECREF(*type);
         return 0;
