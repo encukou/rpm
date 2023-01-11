@@ -19,6 +19,7 @@ Python3_add_library(_rpm
 )
 	
 target_link_libraries(_rpm PRIVATE librpmio librpm librpmbuild librpmsign)
+target_compile_definitions(_rpm PRIVATE Py_LIMITED_API=0x03070000)
 
 install(TARGETS _rpm
 	DESTINATION ${Python3_SITEARCH}/rpm)
