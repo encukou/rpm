@@ -262,6 +262,22 @@ PyInit__rpm(void)
     return m;
 }
 
+static int initAndAddType(PyObject *m, PyTypeObject **type, PyType_Spec *spec,
+                          char *name)
+{
+    if (!*type) {
+        *type = (PyTypeObject *)PyType_FromSpec(spec);
+        if (!*type) return 0;
+    }
+    /* reference counting for PyModule_AddObject is tricky, see the docs */
+    Py_INCREF(&hdr_Type);
+    if (PyModule_AddObject(m, name, (PyObject *) *type) < 0) {
+        Py_DECREF(*type);
+        return 0;
+    }
+    return 1;
+}
+
 /* Module initialization: */
 static int initModule(PyObject *m)
 {
