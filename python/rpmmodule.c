@@ -253,9 +253,18 @@ static struct PyModuleDef moduledef = {
 PyObject *
 PyInit__rpm(void);
 
+static int moduleInitialized = 0;
+
 PyObject *
 PyInit__rpm(void)
 {
+    if (moduleInitialized) {
+        PyErr_SetString(PyExc_ImportError,
+                        "cannot load rpm module more than once per process");
+        return NULL;
+    }
+    moduleInitialized = 1;
+
     PyObject * m;
     m = PyModule_Create(&moduledef);
     initModule(m);
