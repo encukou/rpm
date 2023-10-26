@@ -350,7 +350,7 @@ PyType_Spec rpmfile_Type_Spec = {
 
 PyObject * rpmfile_Wrap(rpmfiles files, int ix)
 {
-    rpmfileObject *s = PyObject_New(rpmfileObject, rpmfile_Type);
+    rpmfileObject *s = PyObject_New(rpmfileObject, modstate->rpmfile_Type);
     if (s == NULL) return NULL;
 
     s->files = rpmfilesLink(files);
@@ -464,7 +464,7 @@ static PyObject *rpmfiles_archive(rpmfilesObject *s,
 	archive = rpmfiNewArchiveReader(fd, s->files, RPMFI_ITER_READ_ARCHIVE);
     }
 
-    return rpmarchive_Wrap(rpmarchive_Type, s->files, archive);
+    return rpmarchive_Wrap(modstate->rpmarchive_Type, s->files, archive);
 }
 
 static PyObject *rpmfiles_subscript(rpmfilesObject *s, PyObject *item)
