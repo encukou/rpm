@@ -29,6 +29,8 @@
  * \name Module: rpm
  */
 
+rpmmodule_state_t *modstate = NULL;
+
 static PyObject * archScore(PyObject * self, PyObject * arg)
 {
     const char * arch;
@@ -251,8 +253,6 @@ static struct PyModuleDef moduledef = {
 PyObject *
 PyInit__rpm(void);
 
-static int moduleInitialized = 0;
-
 PyObject *
 PyInit__rpm(void)
 {
@@ -268,12 +268,17 @@ PyInit__rpm(void)
      *   counting (right now the types are treated as immortal).
      */
 
-    if (moduleInitialized) {
+    if (modstate) {
         PyErr_SetString(PyExc_ImportError,
                         "cannot load rpm module more than once per process");
         return NULL;
     }
-    moduleInitialized = 1;
+    modstate = malloc(sizeof(rpmmodule_state_t));
+    if (!modstate) {
+        PyErr_NoMemory();
+        return NULL;
+    }
+    memset(modstate, 0, sizeof(rpmmodule_state_t));
 
     PyObject * m;
     m = PyModule_Create(&moduledef);
