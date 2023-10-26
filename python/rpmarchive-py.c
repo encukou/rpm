@@ -238,7 +238,6 @@ static PyType_Slot rpmarchive_Type_Slots[] = {
     {0, NULL},
 };
 
-PyTypeObject* rpmarchive_Type;
 PyType_Spec rpmarchive_Type_Spec = {
     .name = "rpm.archive",
     .basicsize = sizeof(rpmarchiveObject),

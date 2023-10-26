@@ -67,7 +67,6 @@ static PyType_Slot rpmPubkey_Type_Slots[] = {
     {0, NULL},
 };
 
-PyTypeObject* rpmPubkey_Type;
 PyType_Spec rpmPubkey_Type_Spec = {
     .name = "rpm.pubkey",
     .basicsize = sizeof(rpmPubkeyObject),
@@ -124,7 +123,6 @@ static PyType_Slot rpmKeyring_Type_Slots[] = {
     {0, NULL},
 };
 
-PyTypeObject* rpmKeyring_Type;
 PyType_Spec rpmKeyring_Type_Spec = {
     .name = "rpm.keyring",
     .basicsize = sizeof(rpmKeyringObject),

@@ -101,7 +101,6 @@ static PyType_Slot rpmstrPool_Type_Slots[] = {
     {0, NULL},
 };
 
-PyTypeObject* rpmstrPool_Type;
 PyType_Spec rpmstrPool_Type_Spec = {
     .name = "rpm.strpool",
     .basicsize = sizeof(rpmstrPoolObject),

@@ -282,7 +282,6 @@ static PyType_Slot rpmte_Type_Slots[] = {
     {0, NULL},
 };
 
-PyTypeObject* rpmte_Type;
 PyType_Spec rpmte_Type_Spec = {
     .name = "rpm.te",
     .basicsize = sizeof(rpmteObject),

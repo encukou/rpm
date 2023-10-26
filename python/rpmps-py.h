@@ -5,7 +5,6 @@
 
 typedef struct rpmProblemObject_s rpmProblemObject;
 
-extern PyTypeObject* rpmProblem_Type;
 extern PyType_Spec rpmProblem_Type_Spec;
 
 #define rpmProblemObject_Check(v)	((v)->ob_type == rpmProblem_Type)

@@ -5,7 +5,6 @@
 
 typedef struct rpmtsObject_s rpmtsObject;
 
-extern PyTypeObject* rpmts_Type;
 extern PyType_Spec rpmts_Type_Spec;
 
 #define rpmtsObject_Check(v)	((v)->ob_type == rpmts_Type)

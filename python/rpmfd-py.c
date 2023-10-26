@@ -356,7 +356,6 @@ static PyType_Slot rpmfd_Type_Slots[] = {
     {0, NULL},
 };
 
-PyTypeObject* rpmfd_Type;
 PyType_Spec rpmfd_Type_Spec = {
     .name = "rpm.fd",
     .basicsize = sizeof(rpmfdObject),

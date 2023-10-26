@@ -5,7 +5,6 @@
 
 typedef struct hdrObject_s hdrObject;
 
-extern PyTypeObject* hdr_Type;
 extern PyType_Spec hdr_Type_Spec;
 
 #define hdrObject_Check(v)	((v)->ob_type == hdr_Type)

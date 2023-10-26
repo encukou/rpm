@@ -5,7 +5,6 @@
 
 typedef struct rpmverObject_s rpmverObject;
 
-extern PyTypeObject* rpmver_Type;
 extern PyType_Spec rpmver_Type_Spec;
 
 #define verObject_Check(v)	(((PyObject*)v)->ob_type == rpmver_Type)

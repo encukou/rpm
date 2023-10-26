@@ -1060,7 +1060,6 @@ static PyType_Slot rpmts_Type_Slots[] = {
     {0, NULL},
 };
 
-PyTypeObject* rpmts_Type;
 PyType_Spec rpmts_Type_Spec = {
     .name = "rpm.ts",
     .basicsize = sizeof(rpmtsObject),
