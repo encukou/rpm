@@ -230,6 +230,7 @@ static void addRpmTags(PyObject *module)
 static int initModule(PyObject *m);
 
 static int rpmModuleTraverse(PyObject *m, visitproc visit, void *arg) {
+    rpmmodule_state_t *modstate = PyModule_GetState(m);
     Py_VISIT(modstate->hdr_Type);
     Py_VISIT(modstate->rpmarchive_Type);
     Py_VISIT(modstate->rpmds_Type);
@@ -257,23 +258,18 @@ static int clearer(PyObject *object, void *) {
 }
 
 static int rpmModuleClear(PyObject *m) {
-    int result = rpmModuleTraverse(m, clearer, NULL);
-    modstate = NULL;
-    return result;
+    return rpmModuleTraverse(m, clearer, NULL);
 }
 
-static void rpmModuleFree(void *_state) {
-    if (modstate) {
-        rpmModuleTraverse(NULL, clearer, NULL);
-        modstate = NULL;
-    }
+static void rpmModuleFree(void *m) {
+    rpmModuleTraverse(m, clearer, NULL);
 }
 
 static struct PyModuleDef moduledef = {
     PyModuleDef_HEAD_INIT,
-    "_rpm",            /* m_name */
-    rpm__doc__,        /* m_doc */
-    0,                 /* m_size */
+    "_rpm",			/* m_name */
+    rpm__doc__,			/* m_doc */
+    sizeof(rpmmodule_state_t),	/* m_size */
     rpmModuleMethods,
     (PyModuleDef_Slot[]) {
 	{Py_mod_exec, initModule},
@@ -301,18 +297,11 @@ PyInit__rpm(void)
      * - implementing traverse, clear & dealloc slots for proper reference
      *   counting (right now the types are treated as immortal).
      */
-
     if (modstate) {
         PyErr_SetString(PyExc_ImportError,
                         "cannot load rpm module more than once per process");
         return NULL;
     }
-    modstate = malloc(sizeof(rpmmodule_state_t));
-    if (!modstate) {
-        PyErr_NoMemory();
-        return NULL;
-    }
-    memset(modstate, 0, sizeof(rpmmodule_state_t));
 
     return PyModuleDef_Init(&moduledef);
 }
@@ -373,6 +362,11 @@ static int initModule(PyObject *m)
 	if (python_version == 0) {
 	    return -1;
 	}
+    }
+
+    modstate = PyModule_GetState(m);
+    if (!modstate) {
+	return -1;
     }
 
     modstate->pyrpmError = PyErr_NewException("_rpm.error", NULL, NULL);
