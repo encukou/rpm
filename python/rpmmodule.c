@@ -275,7 +275,10 @@ static struct PyModuleDef moduledef = {
     rpm__doc__,        /* m_doc */
     0,                 /* m_size */
     rpmModuleMethods,
-    NULL,              /* m_reload */
+    (PyModuleDef_Slot[]) {
+	{Py_mod_exec, initModule},
+	{0, NULL},
+    },
     rpmModuleTraverse,
     rpmModuleClear,
     rpmModuleFree
@@ -311,10 +314,7 @@ PyInit__rpm(void)
     }
     memset(modstate, 0, sizeof(rpmmodule_state_t));
 
-    PyObject * m;
-    m = PyModule_Create(&moduledef);
-    initModule(m);
-    return m;
+    return PyModuleDef_Init(&moduledef);
 }
 
 /* Create a type object based on a Spec, and add it to the module. */
@@ -364,14 +364,14 @@ static int initModule(PyObject *m)
 
     /* failure to initialize rpm (crypto and all) is rather fatal too... */
     if (rpmReadConfigFiles(NULL, NULL) == -1)
-	return 0;
+	return -1;
 
     d = PyModule_GetDict(m);
 
     if (python_version == 0) {
 	python_version = _get_python_version();
 	if (python_version == 0) {
-	    return 0;
+	    return -1;
 	}
     }
 
@@ -380,70 +380,70 @@ static int initModule(PyObject *m)
 	PyDict_SetItemString(d, "error", modstate->pyrpmError);
 
     if (!initAndAddType(m, &modstate->hdr_Type, &hdr_Type_Spec, "hdr")) {
-	return 0;
+	return -1;
     }
 
     if (!initAndAddType(m, &modstate->rpmarchive_Type, &rpmarchive_Type_Spec, "archive")) {
-	return 0;
+	return -1;
     }
 
     if (!initAndAddType(m, &modstate->rpmds_Type, &rpmds_Type_Spec, "ds")) {
-	return 0;
+	return -1;
     }
 
     if (!initAndAddType(m, &modstate->rpmfd_Type, &rpmfd_Type_Spec, "fd")) {
-	return 0;
+	return -1;
     }
 
     if (!initAndAddType(m, &modstate->rpmfile_Type, &rpmfile_Type_Spec, "file")) {
-	return 0;
+	return -1;
     }
 
     if (!initAndAddType(m, &modstate->rpmfiles_Type, &rpmfiles_Type_Spec, "files")) {
-	return 0;
+	return -1;
     }
 
     if (!initAndAddType(m, &modstate->rpmKeyring_Type, &rpmKeyring_Type_Spec, "keyring")) {
-	return 0;
+	return -1;
     }
 
     if (!initAndAddType(m, &modstate->rpmmi_Type, &rpmmi_Type_Spec, "mi")) {
-	return 0;
+	return -1;
     }
 
     if (!initAndAddType(m, &modstate->rpmii_Type, &rpmii_Type_Spec, "ii")) {
-	return 0;
+	return -1;
     }
 
     if (!initAndAddType(m, &modstate->rpmProblem_Type, &rpmProblem_Type_Spec, "prob")) {
-	return 0;
+	return -1;
     }
 
     if (!initAndAddType(m, &modstate->rpmPubkey_Type, &rpmPubkey_Type_Spec, "pubkey")) {
-	return 0;
+	return -1;
     }
 
     if (!initAndAddType(m, &modstate->rpmstrPool_Type, &rpmstrPool_Type_Spec, "strpool")) {
-	return 0;
+	return -1;
     }
 
     if (!initAndAddType(m, &modstate->rpmte_Type, &rpmte_Type_Spec, "te")) {
-	return 0;
+	return -1;
     }
 
     if (!initAndAddType(m, &modstate->rpmts_Type, &rpmts_Type_Spec, "ts")) {
-	return 0;
+	return -1;
     }
 
     if (!initAndAddType(m, &modstate->rpmver_Type, &rpmver_Type_Spec, "ver")) {
-	return 0;
+	return -1;
     }
 
     if (!initAndAddType(m, &modstate->spec_Type, &spec_Type_Spec, "spec")) {
-	return 0;
+	return -1;
     }
     if (!initAndAddType(m, &modstate->specPkg_Type, &specPkg_Type_Spec, "specPkg")) {
-	return 0;
+	return -1;
     }
 
     addRpmTags(m);
@@ -705,6 +705,6 @@ static int initModule(PyObject *m)
     REGISTER_ENUM(RPMSPEC_FORCE);
     REGISTER_ENUM(RPMSPEC_NOLANG);
 
-    return 1;
+    return 0;
 }
 
