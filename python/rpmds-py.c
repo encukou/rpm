@@ -8,8 +8,6 @@
 #include "rpmds-py.h"
 #include "rpmstrpool-py.h"
 
-extern rpmmodule_state_t *modstate;  // TODO: Remove
-
 struct rpmdsObject_s {
     PyObject_HEAD
     int		active;
@@ -115,6 +113,10 @@ static PyObject *
 rpmds_Find(rpmdsObject * s, PyObject * arg)
 {
     rpmdsObject * o;
+    rpmmodule_state_t *modstate = rpmModState_FromObject((PyObject*)s);
+    if (!modstate) {
+	return NULL;
+    }
 
     if (!PyArg_Parse(arg, "O!:Find", modstate->rpmds_Type, &o))
 	return NULL;
@@ -129,6 +131,10 @@ static PyObject *
 rpmds_Merge(rpmdsObject * s, PyObject * arg)
 {
     rpmdsObject * o;
+    rpmmodule_state_t *modstate = rpmModState_FromObject((PyObject*)s);
+    if (!modstate) {
+	return NULL;
+    }
 
     if (!PyArg_Parse(arg, "O!:Merge", modstate->rpmds_Type, &o))
 	return NULL;
@@ -139,6 +145,10 @@ static PyObject *
 rpmds_Search(rpmdsObject * s, PyObject * arg)
 {
     rpmdsObject * o;
+    rpmmodule_state_t *modstate = rpmModState_FromObject((PyObject*)s);
+    if (!modstate) {
+	return NULL;
+    }
 
     if (!PyArg_Parse(arg, "O!:Merge", modstate->rpmds_Type, &o))
         return NULL;
@@ -149,6 +159,10 @@ rpmds_Search(rpmdsObject * s, PyObject * arg)
 static PyObject *rpmds_Compare(rpmdsObject * s, PyObject * o)
 {
     rpmdsObject * ods;
+    rpmmodule_state_t *modstate = rpmModState_FromObject((PyObject*)s);
+    if (!modstate) {
+	return NULL;
+    }
 
     if (!PyArg_Parse(o, "O!:Compare", modstate->rpmds_Type, &ods))
 	return NULL;
@@ -166,6 +180,10 @@ static PyObject * rpmds_Rpmlib(rpmdsObject * s, PyObject *args, PyObject *kwds)
     rpmstrPool pool = NULL;
     rpmds ds = NULL;
     char * kwlist[] = {"pool", NULL};
+    rpmmodule_state_t *modstate = rpmModState_FromObject((PyObject*)s);
+    if (!modstate) {
+	return NULL;
+    }
 
     if (!PyArg_ParseTupleAndKeywords(args, kwds, "|O&:rpmds_Rpmlib", kwlist, 
 		 &poolFromPyObject, &pool))
