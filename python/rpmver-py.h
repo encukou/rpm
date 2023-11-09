@@ -7,7 +7,14 @@ typedef struct rpmverObject_s rpmverObject;
 
 extern PyType_Spec rpmver_Type_Spec;
 
-#define verObject_Check(v)	(((PyObject*)v)->ob_type == modstate->rpmver_Type)
+static inline int verObject_Check(PyObject *v) {
+	rpmmodule_state_t *modstate = rpmModState_FromObject(v);
+    if (!modstate) {
+        PyErr_Clear();
+        return 0;
+    }
+    return (v)->ob_type == modstate->rpmver_Type;
+}
 
 int verFromPyObject(PyObject *item, rpmver *ver);
 PyObject * rpmver_Wrap(PyTypeObject *subtype, rpmver ver);
