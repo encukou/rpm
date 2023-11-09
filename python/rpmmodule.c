@@ -29,7 +29,6 @@
  * \name Module: rpm
  */
 
-rpmmodule_state_t *modstate = NULL;
 unsigned long python_version = 0;
 
 static PyObject * archScore(PyObject * self, PyObject * arg)
@@ -378,7 +377,7 @@ static int initModule(PyObject *m)
 	}
     }
 
-    modstate = PyModule_GetState(m);
+    rpmmodule_state_t *modstate = PyModule_GetState(m);
     if (!modstate) {
 	return -1;
     }
