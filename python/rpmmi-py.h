@@ -5,8 +5,6 @@ typedef struct rpmmiObject_s rpmmiObject;
 
 extern PyType_Spec rpmmi_Type_Spec;
 
-#define rpmmiObject_Check(v)	((v)->ob_type == modstate->rpmmi_Type)
-
 PyObject * rpmmi_Wrap(PyTypeObject *subtype, rpmdbMatchIterator mi, PyObject *s);
 
 #endif

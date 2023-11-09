@@ -7,8 +7,6 @@ typedef struct rpmarchiveObject_s rpmarchiveObject;
 
 extern PyType_Spec rpmarchive_Type_Spec;
 
-#define rpmarchiveObject_Check(v)	((v)->ob_type == modstate->rpmarchive_Type)
-
 PyObject * rpmarchive_Wrap(PyTypeObject *subtype,
 			   rpmfiles files, rpmfi archive);
 
