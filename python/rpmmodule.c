@@ -29,7 +29,6 @@
  * \name Module: rpm
  */
 
-rpmmodule_state_t *modstate = NULL;
 unsigned long python_version = 0;
 
 static PyObject * archScore(PyObject * self, PyObject * arg)
@@ -286,23 +285,6 @@ PyInit__rpm(void);
 PyObject *
 PyInit__rpm(void)
 {
-    /* We store pointers to our Python type objects in global variables,
-     * which would get clobbered if the initialization code could run
-     * several times. Explicitly disallow that.
-     *
-     * This means the extension cannot be unloaded and reloaded, nor used
-     * in multiple Python interpreters. The limitation could be lifted
-     * in the future by:
-     * - storing *_Type in module state rather than C static variables.
-     * - implementing traverse, clear & dealloc slots for proper reference
-     *   counting (right now the types are treated as immortal).
-     */
-    if (modstate) {
-        PyErr_SetString(PyExc_ImportError,
-                        "cannot load rpm module more than once per process");
-        return NULL;
-    }
-
     return PyModuleDef_Init(&moduledef);
 }
 
@@ -364,7 +346,7 @@ static int initModule(PyObject *m)
 	}
     }
 
-    modstate = PyModule_GetState(m);
+    rpmmodule_state_t *modstate = PyModule_GetState(m);
     if (!modstate) {
 	return -1;
     }
