@@ -855,13 +855,20 @@ True
 RPMPY_TEST([test_test],[
 # This uses private API to test things out.
 import _interpreters
+import rpm._rpm
+
+print(id(rpm._rpm.error))
 
 interp = _interpreters.create("legacy")
 result = _interpreters.run_string(interp, """if True:
-    import rpm
+    import rpm._rpm
+    print(id(rpm._rpm.error))
 """)
 print(result)
 _interpreters.destroy(interp)
+
+print(id(rpm._rpm.error))
+
 ],
 [None
 ]);

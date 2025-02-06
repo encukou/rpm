@@ -305,12 +305,6 @@ static int initModule(PyObject *m)
      *   counting (right now the types are treated as immortal).
      */
 
-    if (moduleInitialized) {
-        PyErr_SetString(PyExc_ImportError,
-                        "cannot load rpm module more than once per process");
-        return -1;
-    }
-    moduleInitialized = 1;
 
     PyObject * d;
 
