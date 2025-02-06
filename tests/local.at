@@ -20,6 +20,9 @@ dbpath=rpm.expandMacro('%_dbpath')
 rpm.addMacro('_dbpath', '${RPMTEST}%s' % dbpath)
 rpm.addMacro('_db_backend', os.getenv('DBFORMAT'))
 def myprint(msg = ''):
+    """A workaround for some deficiency in Python 2's print.
+    Nowadays it's better to use print() itself instead.
+    """
     sys.stdout.write('%s\n' % msg)
 ts = rpm.ts()
 ts.setFlags(rpm.RPMTRANS_FLAG_NOPLUGINS)
