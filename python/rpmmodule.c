@@ -255,6 +255,12 @@ static struct PyModuleDef moduledef = {
     NULL               /* m_free */
 };
 
+/* The init function must be exported as it's called by Python, but it doesn't
+ * need a declaration in a header file.
+ * Provide a declaration to avoid -Wmissing-prototypes warnings.
+ */
+PyObject *PyInit__rpm(void);
+
 PyObject *
 PyInit__rpm(void)
 {
