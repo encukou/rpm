@@ -256,9 +256,6 @@ static struct PyModuleDef moduledef = {
 };
 
 PyObject *
-PyInit__rpm(void);
-
-PyObject *
 PyInit__rpm(void)
 {
     return PyModuleDef_Init(&moduledef);
@@ -291,18 +288,6 @@ static int initAndAddType(PyObject *m, PyTypeObject **type, PyType_Spec *spec,
 /* Module initialization: */
 static int initModule(PyObject *m)
 {
-    /* We store pointers to our Python type objects in global variables,
-     * which would get clobbered if the initialization code could run
-     * several times. Explicitly disallow that.
-     *
-     * This means the extension cannot be unloaded and reloaded, nor used
-     * in multiple Python interpreters. The limitation could be lifted
-     * in the future by:
-     * - storing *_Type in module state rather than C static variables.
-     * - implementing traverse, clear & dealloc slots for proper reference
-     *   counting (right now the types are treated as immortal).
-     */
-
     modstate = malloc(sizeof(rpmmodule_state_t));
     if (!modstate) {
         PyErr_NoMemory();
