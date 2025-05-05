@@ -155,6 +155,17 @@ static PyObject * delSign(PyObject * self, PyObject * args, PyObject *kwds)
     return PyBool_FromLong(rpmPkgDelSign(path, &sargs) == 0);
 }
 
+static PyObject * raiseError(PyObject * self, PyObject * ignored)
+{
+    rpmmodule_state_t *modstate = rpmModState_FromModule(self);
+    if (modstate->pyrpmError == NULL) {
+	PyErr_SetString(PyExc_SystemError, "pyrpmError is NULL!");
+    } else {
+	PyErr_SetString(modstate->pyrpmError, "this is a dummy error");
+    }
+    return NULL;
+}
+
 static PyMethodDef rpmModuleMethods[] = {
     { "addMacro", (PyCFunction) rpmmacro_AddMacro, METH_VARARGS|METH_KEYWORDS,
       "rpmPushMacro(macro, value)\n"
@@ -196,6 +207,7 @@ static PyMethodDef rpmModuleMethods[] = {
       "Set all macros and settings accordingly."},
     { "addSign", (PyCFunction) addSign, METH_VARARGS|METH_KEYWORDS, NULL },
     { "delSign", (PyCFunction) delSign, METH_VARARGS|METH_KEYWORDS, NULL },
+    { "_raise_error", (PyCFunction) raiseError, METH_NOARGS, NULL },
     { NULL }
 } ;
 

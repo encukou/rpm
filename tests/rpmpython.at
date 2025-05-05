@@ -862,21 +862,38 @@ True
 ]);
 
 RPMPY_TEST([test_test],[
-# This uses private API to test things out.
+# This uses private API to demonstrate things. It is not a test.
 import _interpreters
 import rpm._rpm
 
-print(id(rpm._rpm.error))
+try:
+    rpm._rpm._raise_error()
+except Exception as e:
+    print(e, id(type(e)), flush=True)
 
 interp = _interpreters.create("legacy")
 result = _interpreters.run_string(interp, """if True:
     import rpm._rpm
-    print(id(rpm._rpm.error))
+
+    try:
+        rpm._rpm._raise_error()
+    except Exception as e:
+        print(e, id(type(e)), flush=True)
 """)
 print(result)
+
+try:
+    rpm._rpm._raise_error()
+except Exception as e:
+    print(e, id(type(e)), flush=True)
+
 _interpreters.destroy(interp)
 
-print(id(rpm._rpm.error))
+
+try:
+    rpm._rpm._raise_error()
+except Exception as e:
+    print(e, id(type(e)), flush=True)
 
 ],
 [None
