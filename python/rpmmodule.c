@@ -327,13 +327,8 @@ static int initAndAddType(PyObject *m, PyTypeObject **type, PyType_Spec *spec,
         *type = (PyTypeObject *)PyType_FromModuleAndSpec(m, spec, NULL);
         if (!*type) return 0;
     }
-    /* We intentionally leak a reference to `type` (only once per type per
-     * process).
-     */
-    Py_INCREF(*type);
     /* Reference counting for PyModule_AddObject is tricky (see
-     * PyModule_AddObject docs). But let's do it right, as if we haven't just
-     * leaked.
+     * PyModule_AddObject docs).
      * (Simpler API, `PyModule_AddObjectRef`, is only in Python 3.10+.)
      */
     if (PyModule_AddObject(m, name, (PyObject *) *type) < 0) {
