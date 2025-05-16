@@ -45,7 +45,7 @@ ts.setFlags(rpm.RPMTRANS_FLAG_NOPLUGINS)
 $1
 EOF
 # Python is such a mess wrt ASAN, ignore it for now
-LD_PRELOAD=${ASANLIB} ASAN_OPTIONS=detect_leaks=0 ${PYTHON} test.py
+LD_PRELOAD=${ASANLIB} ASAN_OPTIONS=detect_leaks=0 ${PYTHON} -X showrefcount test.py
 ]])
 
 m4_define([RPMTEST_SKIP_IF],[
@@ -83,8 +83,8 @@ RPMTEST_CHECK_UNQUOTED(
 
 m4_define([RPMPY_CHECK],[
 AT_SKIP_IF([$PYTHON_DISABLED])
-RPMTEST_CHECK([RPMPY_RUN([$1])], [], [$2], [$3])
-])
+RPMTEST_CHECK([RPMPY_RUN([$1])], [], [$2], [$3]@<:@0 refs[,] 0 blocks@:>@
+)])
 
 m4_define([RPMPY_TEST],[
 RPMTEST_SETUP([$1])

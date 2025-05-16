@@ -327,10 +327,11 @@ static int initAndAddType(PyObject *m, PyTypeObject **type, PyType_Spec *spec,
         *type = (PyTypeObject *)PyType_FromModuleAndSpec(m, spec, NULL);
         if (!*type) return 0;
     }
-    /* Reference counting for PyModule_AddObject is tricky (see
-     * PyModule_AddObject docs).
+    /* Reference counting for PyModule_AddObject is tricky: it steals a
+     * reference on success only. (see PyModule_AddObject docs)
      * (Simpler API, `PyModule_AddObjectRef`, is only in Python 3.10+.)
      */
+    Py_INCREF(*type);
     if (PyModule_AddObject(m, name, (PyObject *) *type) < 0) {
         Py_DECREF(*type);
         return 0;

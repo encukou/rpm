@@ -269,6 +269,7 @@ endif()
 list(APPEND db_backends dummy)
 
 if (ENABLE_PYTHON)
+	set (Python3_FIND_ABI "ON" "ANY" "ANY" "ANY")
 	find_package(Python3 3.10...<3.14 COMPONENTS Interpreter Development REQUIRED)
 endif()
 
