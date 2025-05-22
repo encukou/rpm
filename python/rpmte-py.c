@@ -170,6 +170,8 @@ static PyObject *
 rpmte_SetUserdata(rpmteObject * s, PyObject *arg)
 {
     /* XXX how to insure this is a PyObject??? */
+    /* XXX how to DECREF the object when s->te is destroyed,
+     * so that it does not leak? */
     PyObject *o = rpmteUserdata(s->te);
     rpmteSetUserdata(s->te, arg);
     Py_INCREF(arg);
