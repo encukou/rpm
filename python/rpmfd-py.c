@@ -140,7 +140,7 @@ static void rpmfd_dealloc(rpmfdObject *s)
     Py_XDECREF(res);
     free(s->mode);
     free(s->flags);
-    freefunc free = PyType_GetSlot(Py_TYPE(s), Py_tp_free);
+    freefunc free = PyType_GetSlot(Py_TYPE((PyObject *)s), Py_tp_free);
     free(s);
 }
 

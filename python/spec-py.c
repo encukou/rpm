@@ -125,7 +125,7 @@ spec_dealloc(specObject * s)
     if (s->spec) {
 	s->spec=rpmSpecFree(s->spec);
     }
-    freefunc free = PyType_GetSlot(Py_TYPE(s), Py_tp_free);
+    freefunc free = PyType_GetSlot(Py_TYPE((PyObject *)s), Py_tp_free);
     free(s);
 }
 
@@ -306,7 +306,7 @@ PyObject * specPkg_Wrap(PyTypeObject *subtype, rpmSpecPkg pkg, specObject *sourc
 
     s->pkg = pkg;
     s->source_spec = source;
-    Py_INCREF(s->source_spec);
+    Py_INCREF((PyObject*)s->source_spec);
     return (PyObject *) s;
 }
 

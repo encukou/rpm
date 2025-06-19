@@ -101,7 +101,7 @@ rpmds_iternext(rpmdsObject * s)
 
     /* If more to do, return a (N, EVR, Flags) tuple. */
     if (rpmdsNext(s->ds) >= 0) {
-	result = rpmds_Wrap(Py_TYPE(s), rpmdsCurrent(s->ds));
+	result = rpmds_Wrap(Py_TYPE((PyObject *)s), rpmdsCurrent(s->ds));
     } else
 	s->active = 0;
 
@@ -233,7 +233,7 @@ static void
 rpmds_dealloc(rpmdsObject * s)
 {
     s->ds = rpmdsFree(s->ds);
-    freefunc free = PyType_GetSlot(Py_TYPE(s), Py_tp_free);
+    freefunc free = PyType_GetSlot(Py_TYPE((PyObject *)s), Py_tp_free);
     free(s);
 }
 

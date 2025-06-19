@@ -11,7 +11,7 @@ struct rpmPubkeyObject_s {
 static void rpmPubkey_dealloc(rpmPubkeyObject * s)
 {
     s->pubkey = rpmPubkeyFree(s->pubkey);
-    freefunc free = PyType_GetSlot(Py_TYPE(s), Py_tp_free);
+    freefunc free = PyType_GetSlot(Py_TYPE((PyObject *)s), Py_tp_free);
     free(s);
 }
 
@@ -82,7 +82,7 @@ struct rpmKeyringObject_s {
 static void rpmKeyring_dealloc(rpmKeyringObject * s)
 {
     rpmKeyringFree(s->keyring);
-    freefunc free = PyType_GetSlot(Py_TYPE(s), Py_tp_free);
+    freefunc free = PyType_GetSlot(Py_TYPE((PyObject *)s), Py_tp_free);
     free(s);
 }
 

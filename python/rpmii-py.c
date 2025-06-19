@@ -108,7 +108,7 @@ static void rpmii_dealloc(rpmiiObject * s)
     s->ii = rpmdbIndexIteratorFree(s->ii);
     rpmtdFree(s->keytd);
     Py_DECREF(s->ref);
-    freefunc free = PyType_GetSlot(Py_TYPE(s), Py_tp_free);
+    freefunc free = PyType_GetSlot(Py_TYPE((PyObject*)s), Py_tp_free);
     free(s);
 }
 

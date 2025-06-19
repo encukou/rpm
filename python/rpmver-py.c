@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "rpmsystem-py.h"
 #include "header-py.h"
 #include <rpm/rpmver.h>

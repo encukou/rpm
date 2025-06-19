@@ -242,7 +242,7 @@ static PyObject * hdrWrite(hdrObject *s, PyObject *args, PyObject *kwds)
     Py_END_ALLOW_THREADS;
 
     if (rc) PyErr_SetFromErrno(PyExc_IOError);
-    Py_XDECREF(fdo); /* avoid messing up errno with file close  */
+    Py_XDECREF((PyObject *)fdo); /* avoid messing up errno with file close  */
     if (rc) return NULL;
 
     Py_RETURN_NONE;
@@ -258,7 +258,7 @@ static PyObject * hdr_reduce(hdrObject *s)
     PyObject *res = NULL;
     PyObject *blob = hdrAsBytes(s);
     if (blob) {
-	res = Py_BuildValue("O(O)", Py_TYPE(s), blob);
+	res = Py_BuildValue("O(O)", Py_TYPE((PyObject*)s), blob);
 	Py_DECREF(blob);
     }
     return res;
@@ -310,7 +310,7 @@ static PyObject *hdr_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds)
 	Py_BEGIN_ALLOW_THREADS;
 	h = headerRead(rpmfdGetFd(fdo), HEADER_MAGIC_YES);
 	Py_END_ALLOW_THREADS;
-	Py_XDECREF(fdo);
+	Py_XDECREF((PyObject *)fdo);
     } else {
     	PyErr_SetString(PyExc_TypeError, "header, blob or file expected");
 	return NULL;
@@ -327,7 +327,7 @@ static PyObject *hdr_new(PyTypeObject *subtype, PyObject *args, PyObject *kwds)
 static void hdr_dealloc(hdrObject * s)
 {
     if (s->h) headerFree(s->h);
-    freefunc free = PyType_GetSlot(Py_TYPE(s), Py_tp_free);
+    freefunc free = PyType_GetSlot(Py_TYPE((PyObject*)s), Py_tp_free);
     free(s);
 }
 

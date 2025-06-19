@@ -21,7 +21,7 @@ static void rpmarchive_dealloc(rpmarchiveObject * s)
     rpmfilesFree(s->files);
     rpmfiArchiveClose(s->archive);
     rpmfiFree(s->archive);
-    freefunc free = PyType_GetSlot(Py_TYPE(s), Py_tp_free);
+    freefunc free = PyType_GetSlot(Py_TYPE((PyObject *)s), Py_tp_free);
     free(s);
 }
 

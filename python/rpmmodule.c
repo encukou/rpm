@@ -281,7 +281,7 @@ static int initAndAddType(PyObject *m, PyTypeObject **type, PyType_Spec *spec,
     /* We intentionally leak a reference to `type` (only once per type per
      * process).
      */
-    Py_INCREF(*type);
+    Py_INCREF((PyObject*)*type);
     /* Reference counting for PyModule_AddObject is tricky (see
      * PyModule_AddObject docs). But let's do it right, as if we haven't just
      * leaked.

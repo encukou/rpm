@@ -20,7 +20,7 @@ struct rpmfileObject_s {
 static void rpmfile_dealloc(rpmfileObject * s)
 {
     s->files = rpmfilesFree(s->files);
-    freefunc free = PyType_GetSlot(Py_TYPE(s), Py_tp_free);
+    freefunc free = PyType_GetSlot(Py_TYPE((PyObject *)s), Py_tp_free);
     free(s);
 }
 
@@ -210,8 +210,8 @@ static PyObject *rpmfile_links(rpmfileObject *s)
 
 	    if (lix == s->ix) {
 		/* file itself, return a reference instead of new object */
-		Py_INCREF(s);
 		o = (PyObject *) s;
+		Py_INCREF(o);
 	    } else {
 		o = rpmfile_Wrap(s->files, lix);
 	    }
@@ -369,7 +369,7 @@ struct rpmfilesObject_s {
 static void rpmfiles_dealloc(rpmfilesObject * s)
 {
     s->files = rpmfilesFree(s->files);
-    freefunc free = PyType_GetSlot(Py_TYPE(s), Py_tp_free);
+    freefunc free = PyType_GetSlot(Py_TYPE((PyObject*)s), Py_tp_free);
     free(s);
 }
 

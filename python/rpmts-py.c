@@ -416,7 +416,7 @@ rpmts_HdrFromFdno(rpmtsObject * s, PyObject *arg)
     Py_BEGIN_ALLOW_THREADS;
     rpmrc = rpmReadPackageFile(s->ts, rpmfdGetFd(fdo), NULL, &h);
     Py_END_ALLOW_THREADS;
-    Py_XDECREF(fdo);
+    Py_XDECREF((PyObject *)fdo);
 
     if (rpmrc == RPMRC_OK) {
 	ho = hdr_Wrap(modstate->hdr_Type, h);
@@ -836,9 +836,9 @@ static void rpmts_dealloc(rpmtsObject * s)
 {
 
     s->ts = rpmtsFree(s->ts);
-    Py_XDECREF(s->scriptFd);
-    Py_XDECREF(s->keyList);
-    freefunc free = PyType_GetSlot(Py_TYPE(s), Py_tp_free);
+    Py_XDECREF((PyObject*)s->scriptFd);
+    Py_XDECREF((PyObject*)s->keyList);
+    freefunc free = PyType_GetSlot(Py_TYPE((PyObject*)s), Py_tp_free);
     free(s);
 }
 
@@ -902,11 +902,11 @@ static int rpmts_set_scriptFd(rpmtsObject *s, PyObject *value, void *closure)
     rpmfdObject *fdo = NULL;
     int rc = 0;
     if (PyArg_Parse(value, "O&", rpmfdFromPyObject, &fdo)) {
-	Py_XDECREF(s->scriptFd);
+	Py_XDECREF((PyObject*)s->scriptFd);
 	s->scriptFd = fdo;
 	rpmtsSetScriptFd(s->ts, rpmfdGetFd(s->scriptFd));
     } else if (value == Py_None) {
-	Py_XDECREF(s->scriptFd);
+	Py_XDECREF((PyObject*)s->scriptFd);
 	s->scriptFd = NULL;
 	rpmtsSetScriptFd(s->ts, NULL);
     } else {
